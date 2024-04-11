@@ -116,6 +116,15 @@ export default function AppProvider({
       const provider = new ethers.providers.Web3Provider(window.ethereum);
 
       const { provider: ethereum } = provider;
+      const accounts = await provider.listAccounts();
+
+      if (accounts?.length > 0) {
+        setIsConnected(true);
+        setWalletAddress(accounts[0]);
+      } else {
+        setIsConnected(false);
+        setWalletAddress(null);
+      }
       //@ts-ignore
       ethereum.on('accountsChanged', async (accounts: string[]) => {
         console.log('accounts', accounts[0]);
@@ -242,7 +251,7 @@ export default function AppProvider({
       const provider = new ethers.providers.Web3Provider(connection);
       const contract = fetchContract(provider);
 
-      const data = await contract.fetchMarketItem();
+      const data = await contract.fetchMarketItems();
       const items = await Promise.all(
         data.map(
           //@ts-ignore
@@ -285,10 +294,11 @@ export default function AppProvider({
   const fetchMyNFTsOrListedNFTs = async (type: string) => {
     try {
       const contract = await connectingWithSmartContract();
+
       const data =
         type === 'fetchItemsListed'
           ? await contract?.fetchItemsListed()
-          : await contract?.fetchMyNFT();
+          : await contract?.fetchMyNFTs();
 
       const items = await Promise.all(
         data.map(
@@ -298,6 +308,7 @@ export default function AppProvider({
             const {
               data: { image, name, description },
             } = await axios.get(tokenURI);
+            console.log('tokenURI', tokenURI);
 
             const price = ethers.utils.formatUnits(
               unformattedPrice.toString(),

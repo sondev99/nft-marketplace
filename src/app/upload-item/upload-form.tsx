@@ -26,6 +26,9 @@ import {
 } from '@/schemaValidations/product.schema';
 import { useRouter } from 'next/navigation';
 import { AppContext } from '@/context/app-context';
+import { BiLoaderAlt, BiLoaderCircle } from 'react-icons/bi';
+
+import { CgSpinner } from 'react-icons/cg';
 
 type Product = ProductResType['data'];
 
@@ -33,8 +36,7 @@ const UploadForm = ({ product }: { product?: Product }) => {
   const { uploadToPinata, createNft } = useContext(AppContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const router = useRouter();
+  const [isUploadIpfs, setIsUploadIpfs] = useState(false);
   const [active, setActive] = useState(0);
   const [category, setCategory] = useState(0);
 
@@ -78,9 +80,19 @@ const UploadForm = ({ product }: { product?: Product }) => {
   ];
 
   const onSubmit = async (values: CreateProductBodyType) => {
-    console.log(values);
-    createNft(values.name, values.price, values.image, values.description);
+    console.log('sdfsadfasdfsd');
+
+    setIsLoading(true);
+    createNft(
+      values.name,
+      values.price,
+      values.image || '',
+      values.description
+    );
+    setIsLoading(false);
   };
+
+  console.log(isLoading);
 
   return (
     <div className="mt-10 md:mt-0 space-y-5 sm:space-y-6 md:sm:space-y-8">
@@ -111,12 +123,13 @@ const UploadForm = ({ product }: { product?: Product }) => {
                     accept="image/*"
                     ref={inputRef}
                     onChange={async (e) => {
+                      setIsUploadIpfs(true);
                       const file = e.target.files?.[0];
                       if (file) {
                         const url = await uploadToPinata(file);
-                        // setFile(url);
                         field.onChange(url);
                       }
+                      setIsUploadIpfs(false);
                     }}
                   />
                 </FormControl>
@@ -124,6 +137,9 @@ const UploadForm = ({ product }: { product?: Product }) => {
               </FormItem>
             )}
           />
+          <div className="mt-4">
+            {isUploadIpfs && <span className="animate-spin">Loading...</span>}
+          </div>
           {image && (
             <div>
               <Image
@@ -133,20 +149,6 @@ const UploadForm = ({ product }: { product?: Product }) => {
                 alt="preview"
                 className="w-32 h-32 object-cover rounded-lg mb-4"
               />
-              {/* <Button
-                type="button"
-                variant={'destructive'}
-                size={'sm'}
-                onClick={() => {
-                  setFile(null);
-                  form.setValue('image', '');
-                  if (inputRef.current) {
-                    inputRef.current.value = '';
-                  }
-                }}
-              >
-                Remove image
-              </Button> */}
             </div>
           )}
 
@@ -265,7 +267,12 @@ const UploadForm = ({ product }: { product?: Product }) => {
 
             <div className="pt-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 space-x-0 sm:space-x-3 ">
               <Button type="submit" className="rounded-full w-full">
-                Upload
+                {isLoading && (
+                  <span className="animate-spin mr-4">
+                    <CgSpinner />
+                  </span>
+                )}
+                {isLoading ? 'Loading...' : 'Upload'}
               </Button>
             </div>
           </div>

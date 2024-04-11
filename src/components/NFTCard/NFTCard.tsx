@@ -19,7 +19,6 @@ interface ProductListingProps {
 }
 
 const NFTCard = ({ nft, index }: ProductListingProps) => {
-  console.log('product', nft);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {

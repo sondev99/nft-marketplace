@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import NullData from '@/components/NullData';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -20,6 +20,7 @@ import routes from '@/routes';
 
 const NftDetailPage = () => {
   const { buyNFT, walletAddress } = useContext(AppContext);
+  const router = useRouter();
   const [nft, setNft] = useState<nft>({
     image: '',
     description: '',
@@ -29,8 +30,8 @@ const NftDetailPage = () => {
     price: '',
     seller: '',
   });
-  //   if (!product)
-  //     return <NullData title="Oops! Product with the given id does not exist" />;
+  if (!nft)
+    return <NullData title="Oops! Product with the given id does not exist" />;
 
   const searchParams = useSearchParams();
   const image = searchParams.get('image');
@@ -45,9 +46,6 @@ const NftDetailPage = () => {
   useEffect(() => {
     setNft(nftData);
   }, []);
-
-  console.log('nft: ', nft);
-  console.log('walletAddress: ', walletAddress);
 
   return (
     <>
@@ -302,7 +300,10 @@ const NftDetailPage = () => {
                   ) : (
                     <Button
                       className="w-full rounded-full py-6"
-                      onClick={() => buyNFT(nft)}
+                      onClick={() => {
+                        buyNFT(nft);
+                        router.push(`${routes.author}/${walletAddress}`);
+                      }}
                     >
                       <PlaceABidIcon />
                       <span className="ml-2.5">Buy NFT</span>

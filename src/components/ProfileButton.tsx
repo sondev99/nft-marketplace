@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { useUser } from '@/store/useUser';
 import { useRouter } from 'next/navigation';
 import { formatWalletAddress } from '@/lib/utils';
+import routes from '@/routes';
 
 interface ProfileProps {
   walletAddress: string;
@@ -73,7 +74,7 @@ const ProfileButton = ({ walletAddress }: ProfileProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700 p-2">
             <FaRegImage size="24" />
-            <Link href={{ pathname: '/myprofile' }}>
+            <Link href={{ pathname: `${routes.author}/${walletAddress}` }}>
               <p className="text-base font-medium ml-4">My Items</p>
             </Link>
           </DropdownMenuItem>
