@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "src/context/NFTMarketplaceContext.jsx",
     "scripts/deploy.ts",
-    "scripts/deploy.ts"
+    "scripts/deploy.ts",
+    "src/icon/index.jsx"
   ],
   "exclude": ["node_modules"]
 }

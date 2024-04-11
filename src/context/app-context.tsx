@@ -324,10 +324,13 @@ export default function AppProvider({
   };
 
   //-- BUY NFTs
-  const buyNFT = async (nft: any) => {
+  const buyNFT = async (nft: nft) => {
     try {
       const contract = await connectingWithSmartContract();
-      const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
+      let price;
+      if (nft.price) {
+        price = ethers.utils.parseUnits(nft.price.toString() || '', 'ether');
+      }
 
       const transaction = await contract?.createMarketSale(nft.tokenId, {
         value: price,

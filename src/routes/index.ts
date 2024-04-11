@@ -9,6 +9,7 @@ const routes = {
   register: '/register',
 
   upload: '/upload-item',
+  author: '/author',
 
   // store: (userId) => `/store/${userId}`,
   // storeAllProducts: (userId) => `/store/${userId}`,

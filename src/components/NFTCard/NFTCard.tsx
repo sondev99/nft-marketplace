@@ -41,7 +41,7 @@ const NFTCard = ({ nft, index }: ProductListingProps) => {
             'visible animate-in fade-in-5': isVisible,
           }
         )}
-        href={`/product/${nft.id}`}
+        href={{ pathname: '/nft-detail', query: nft }}
       >
         <div className="flex flex-col w-full ">
           <div className="relative flex-shrink-0 ">
