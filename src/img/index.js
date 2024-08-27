@@ -37,6 +37,10 @@ import hero from "./hero.png";
 import nft_1 from "./nft_1.png";
 import getAble from "./getable.png";
 import nft_image_1 from "./nft-image-1.png";
+import category_sport from "./category-sport.jpg";
+import category_arts from "./category-arts.png";
+import category_anime from "./category-anime.png";
+import category_gaming from "./gaming.jpg";
 import nft_image_2 from "./nft-image-2.png";
 import nft_image_3 from "./nft-image-3.png";
 import musiceWave from "./musicwave.png";
@@ -58,6 +62,10 @@ export default {
   getAble,
   nft_1,
   hero,
+  category_sport,
+  category_arts,
+  category_anime,
+  category_gaming,
   creatorbackground1,
   creatorbackground2,
   creatorbackground3,

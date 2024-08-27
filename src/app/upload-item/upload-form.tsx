@@ -59,28 +59,20 @@ const UploadForm = ({ product }: { product?: Product }) => {
 
   const categoryArry = [
     {
-      image: images.nft_image_1,
+      image: images.category_sport,
       category: 'Sports',
     },
     {
-      image: images.nft_image_2,
+      image: images.category_arts,
       category: 'Arts',
     },
     {
-      image: images.nft_image_3,
-      category: 'Music',
+      image: images.category_anime,
+      category: 'Anime',
     },
     {
-      image: images.nft_image_1,
-      category: 'Digital',
-    },
-    {
-      image: images.nft_image_2,
-      category: 'Time',
-    },
-    {
-      image: images.nft_image_3,
-      category: 'Photography',
+      image: images.category_gaming,
+      category: 'Gaming',
     },
   ];
 
@@ -211,7 +203,7 @@ const UploadForm = ({ product }: { product?: Product }) => {
                 Choose an exiting collection or create a new one
               </p>
 
-              <div className="flex gap-2  overflow-auto py-2 space-x-4">
+              <div className="flex gap-2 justify-between overflow-auto py-2 space-x-4">
                 {categoryArry.map((el, i) => (
                   <div
                     className={`"bg-teal-600 text-white

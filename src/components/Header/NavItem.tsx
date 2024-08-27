@@ -5,48 +5,29 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { Navigation } from './Header';
 import Link from 'next/link';
+import { IconType } from 'react-icons';
 
 interface NavItemProps {
-  category: Category;
+  selected?: boolean;
+  icon: IconType;
+  label: string;
 }
 
-const NavItem = ({ category }: NavItemProps) => {
-  const pathname = usePathname();
-  const isActive = pathname.startsWith(`/category/${category.label}`);
-
-  const isMainPage = pathname === '/';
-
-  if (category.label === 'All') {
-    return (
-      <Link
-        href="/"
-        className={`flex items-center justify-center text-center gap-1 py-2 px-3 border-b-2  rounded-[10px] cursor-pointer ${
-          isMainPage ? 'bg-[#ffffff1f] ' : 'border-transparent'
-        }`}
-      >
-        {/* <Image src={category.icon} alt={category.label} width={20} height={20} /> */}
-        <div className="font-bold text-base text-[#737373]">
-          {category.label}
-        </div>
-      </Link>
-    );
-  } else {
-    return (
-      <Link
-        href={{
-          pathname: `/category/${category.href}`,
-        }}
-        className={`flex items-center justify-center text-center gap-1 p-2 border-b-2  rounded-[10px] cursor-pointer ${
-          isActive ? 'dark:bg-[#ffffff1f]' : 'border-transparent'
-        }`}
-      >
-        {/* <Image src={category.icon} alt={category.label} width={20} height={20} /> */}
-        <div className="font-bold text-base text-[#737373]">
-          {category.label}
-        </div>
-      </Link>
-    );
-  }
+const NavItem = ({ selected, icon: Icon, label }: NavItemProps) => {
+  return (
+    <div
+      className={`flex items-center justify-center text-center gap-1 p-2 border-b-2 hover:text-slate-800 transition cursor-pointer ${
+        selected
+          ? 'border-b-slate-800 text-slate-800 dark:text-slate-100'
+          : 'border-transparent text-slate-500 dark:text-slate-600'
+      }`}
+    >
+      <Icon size={20} />
+      <div className="font-medium text-sm text-center break-normal">
+        {label}
+      </div>
+    </div>
+  );
 };
 
 export default NavItem;

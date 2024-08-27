@@ -187,9 +187,9 @@ const Header = () => {
           </div>
         </MaxWidthWrapper>
 
-        {/* <div className=" hidden lg:block">
-          <Navbar categories={categories} />
-        </div> */}
+        <div className=" hidden lg:block">
+          <Navbar />
+        </div>
       </div>
     </>
   );

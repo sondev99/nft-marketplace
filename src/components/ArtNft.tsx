@@ -7,7 +7,7 @@ import Card from './Card/Card';
 import CardShimmer from './Card/CardShimmer';
 import { getMarketplaceNFTs } from '@/utils/web3/marketplace';
 
-export const MarketplaceNFTs = () => {
+export const ArtNft = () => {
   const GET_MARKET_PLACE_NFT = 'getMarketplaceNFTs';
 
   const { isInit } = useWeb3Store();
@@ -30,13 +30,15 @@ export const MarketplaceNFTs = () => {
     setOffset(Math.ceil(selected * limit));
   };
 
-  console.log(marketplaceData);
+  const artsNft = marketplaceData?.items.filter(
+    (item) => item.category === 'Arts'
+  );
 
   return (
     <section>
-      <h2 className="text-2xl font-bold my-3">Trending NFT</h2>
+      <h2 className="text-2xl font-bold my-3">Arts NFT</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {marketplaceData?.items.map((value, index) => (
+        {artsNft?.map((value, index) => (
           <Card
             key={index}
             imageUrl={value.image}
