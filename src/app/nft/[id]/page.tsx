@@ -1,39 +1,41 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import useSWR from "swr";
-import Head from "next/head";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import Head from 'next/head';
 import {
   IoArrowBack,
   IoArrowBackCircle,
   IoArrowUpCircle,
   IoHome,
-} from "react-icons/io5";
-import toast from "react-hot-toast";
-import { ethers } from "ethers";
-import { useWeb3Store } from "@/store/web3Store";
-import BackButton from "@/components/Button/BackButton";
-import Button, { ButtonPreset } from "@/components/Button/Button";
-import Loading from "@/components/Loading";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import NullData from "@/components/NullData";
-import Image from "next/image";
-import { CategoryIcon } from "@/icon";
-import { FaRegHeart } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
-import { CiMenuKebab } from "react-icons/ci";
-import Link from "next/link";
-import images from "@/img";
-import routes from "@/routes";
-import { truncateText } from "@/utils/truncatText";
-import { getMarketplaceNFTById } from "@/utils/web3/marketplace";
-import transactionApi from "@/apis/transactionApi";
-import { TransactionRequest } from "@/type/transactions";
-import moment from "moment";
-import { useUser } from "@/store/useUser";
-import axios from "axios";
-import { formatPrice } from "@/lib/formatPrice";
+} from 'react-icons/io5';
+import toast from 'react-hot-toast';
+import { ethers } from 'ethers';
+import { useWeb3Store } from '@/store/web3Store';
+import BackButton from '@/components/Button/BackButton';
+import Button, { ButtonPreset } from '@/components/Button/Button';
+import Loading from '@/components/Loading';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import NullData from '@/components/NullData';
+import Image from 'next/image';
+import { CategoryIcon } from '@/icon';
+import { FaRegHeart } from 'react-icons/fa';
+import { IoIosArrowDown } from 'react-icons/io';
+import { CiMenuKebab } from 'react-icons/ci';
+import Link from 'next/link';
+import images from '@/img';
+import routes from '@/routes';
+import { truncateText } from '@/utils/truncatText';
+import { getMarketplaceNFTById } from '@/utils/web3/marketplace';
+import transactionApi from '@/apis/transactionApi';
+import { TransactionRequest } from '@/type/transactions';
+import moment from 'moment';
+import { useUser } from '@/store/useUser';
+import axios from 'axios';
+import { formatPrice } from '@/lib/formatPrice';
+import BarGraph from '@/app/admin/BarGraph';
+import ChartPrice from '../ChartPrice';
 
 type PageProps = {
   id: number;
@@ -43,7 +45,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
   const now = moment();
   const router = useRouter();
   const id = params.id;
-  const GET_MARKET_NFT = "getMarketNFT";
+  const GET_MARKET_NFT = 'getMarketNFT';
 
   const { isInit, marketplaceContract, walletAddress } = useWeb3Store();
 
@@ -56,17 +58,17 @@ function NftDetailPage({ params }: { params: PageProps }) {
 
   console.log(nftData);
 
-  const { data: ethPrice } = useSWR(isInit && ["getEthPrice"], () =>
+  const { data: ethPrice } = useSWR(isInit && ['getEthPrice'], () =>
     axios
       .get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
       )
       .then((res) => res.data.ethereum.usd)
   );
 
   const onBuyClicked = async () => {
     if (!nftData || !marketplaceContract) {
-      toast.error("NFT not found, please try again later");
+      toast.error('NFT not found, please try again later');
       return;
     }
 
@@ -83,7 +85,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
         })
         .then((res: any) => res.wait()),
       {
-        loading: "Buying NFT...",
+        loading: 'Buying NFT...',
         success: () => {
           const transactionRequset: TransactionRequest = {
             nftId: nftData.tokenId.toNumber(),
@@ -97,7 +99,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
           return `NFT id ${nftData.tokenId} bought successfully`;
         },
         error: (e) => {
-          return e.reason || e.message || "Error buying NFT";
+          return e.reason || e.message || 'Error buying NFT';
         },
       }
     );
@@ -106,7 +108,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
   return (
     <MaxWidthWrapper>
       <Head>
-        <title>{nftData?.name || "Loading..."}</title>
+        <title>{nftData?.name || 'Loading...'}</title>
       </Head>
       <div className="sticky top-10 left-20 my-3">
         <BackButton />
@@ -121,7 +123,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
               >
                 <Image
                   fill
-                  src={nftData?.image || ""}
+                  src={nftData?.image || ''}
                   className="object-cover w-full h-full"
                   alt="nc-imgs"
                 />
@@ -168,6 +170,24 @@ function NftDetailPage({ params }: { params: PageProps }) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
+              <button
+                className="flex items-center justify-between w-full px-4 py-2 font-medium text-left bg-neutral-100 dark:bg-neutral-700 dark:hover:bg-neutral-500 rounded-lg hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-neutral-500 focus-visible:ring-opacity-75"
+                id="headlessui-disclosure-button-:r18:"
+                type="button"
+                aria-expanded="true"
+                aria-controls="headlessui-disclosure-panel-:r19:"
+              >
+                <span>Descriptions</span>
+                <IoIosArrowDown />
+              </button>
+              <p
+                className="px-4 pt-4 pb-2 text-neutral-500 text-sm dark:text-neutral-400"
+                id="headlessui-disclosure-panel-:r19:"
+              >
+                {nftData?.description}
+              </p>
             </div>
           </div>
           <div className="pt-10 lg:pt-0 xl:pl-10 border-t-2 border-neutral-200 dark:border-neutral-700 lg:border-t-0">
@@ -226,22 +246,7 @@ function NftDetailPage({ params }: { params: PageProps }) {
                   </div>
                 </div>
               </div>
-              <button
-                className="flex items-center justify-between w-full px-4 py-2 font-medium text-left bg-neutral-100 dark:bg-neutral-700 dark:hover:bg-neutral-500 rounded-lg hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-neutral-500 focus-visible:ring-opacity-75"
-                id="headlessui-disclosure-button-:r18:"
-                type="button"
-                aria-expanded="true"
-                aria-controls="headlessui-disclosure-panel-:r19:"
-              >
-                <span>Descriptions</span>
-                <IoIosArrowDown />
-              </button>
-              <p
-                className="px-4 pt-4 pb-2 text-neutral-500 text-sm dark:text-neutral-400"
-                id="headlessui-disclosure-panel-:r19:"
-              >
-                {nftData?.description}
-              </p>
+
               <div className="pb-9 pt-6">
                 <div className="flex-1 flex flex-col sm:flex-row items-baseline p-6 border-2 border-green-500 rounded-xl relative">
                   <span className="absolute bottom-full translate-y-1 py-1 px-1.5 bg-white dark:bg-neutral-900 text-sm text-neutral-500 dark:text-neutral-400">
@@ -267,10 +272,13 @@ function NftDetailPage({ params }: { params: PageProps }) {
                           : ButtonPreset.Fill
                       }
                     >
-                      <span>{nftData.isSold ? "Sold" : "Buy"}</span>
+                      <span>{nftData.isSold ? 'Sold' : 'Buy'}</span>
                     </Button>
                   )}
                 </div>
+              </div>
+              <div>
+                <ChartPrice />
               </div>
             </div>
           </div>

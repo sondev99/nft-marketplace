@@ -1,6 +1,6 @@
-import axiosClient from "@/axios/apiConfig";
-import { API_URL_TRANSACTION } from "@/constant/apiConstant";
-import { TransactionRequest } from "@/type/transactions";
+import axiosClient from '@/axios/apiConfig';
+import { API_URL_TRANSACTION } from '@/constant/apiConstant';
+import { TransactionRequest } from '@/type/transactions';
 
 const url = API_URL_TRANSACTION;
 const transactionApi = {
@@ -9,6 +9,9 @@ const transactionApi = {
   },
   getAllTransaction: () => {
     return axiosClient.get(`${url}`);
+  },
+  getChartPrice: () => {
+    return axiosClient.get(`${url})`);
   },
 };
 

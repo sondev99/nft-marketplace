@@ -1,11 +1,11 @@
-import ClaimNFTButton from "@/components/Button/ClaimNFTButton";
-import Card from "@/components/Card/Card";
-import CardShimmer from "@/components/Card/CardShimmer";
-import NullData from "@/components/NullData";
-import { useGetUserNFTs } from "@/lib/home/hooks/getUserNFTs";
-import { useWeb3Store } from "@/store/web3Store";
-import React, { useState } from "react";
-import ReactPaginate from "react-paginate";
+import ClaimNFTButton from '@/components/Button/ClaimNFTButton';
+import Card from '@/components/Card/Card';
+import CardShimmer from '@/components/Card/CardShimmer';
+import NullData from '@/components/NullData';
+import { useGetUserNFTs } from '@/lib/home/hooks/getUserNFTs';
+import { useWeb3Store } from '@/store/web3Store';
+import React, { useState } from 'react';
+import ReactPaginate from 'react-paginate';
 
 type Props = {};
 
@@ -20,12 +20,14 @@ function MyNFT({}: Props) {
   } = useGetUserNFTs({
     limit,
     offset,
-    walletAddress: walletAddress || "",
+    walletAddress: walletAddress || '',
   });
 
   const handlePageClick = ({ selected }: { selected: number }) => {
     setOffset(Math.ceil(selected * limit));
   };
+
+  console.log('dat', data);
 
   return (
     <section>

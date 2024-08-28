@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import summaryApi from '@/apis/summaryApi';
+import { fakeData1 } from '@/data';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -24,28 +25,10 @@ type GrapData = {
   volume: number;
 };
 
-const BarGraph = () => {
-  const [data, setData] = useState<GrapData[]>([]);
+const ChartPrice = () => {
+  const labels = fakeData1?.map((item) => item.dayOfWeek);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await summaryApi.getTradingVolume7Day();
-        if (response.code === 200) {
-          setData(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  console.log(data);
-
-  const labels = data?.map((item) => item.dayOfWeek);
-
-  const amounts = data?.map((item) => item.volume);
+  const amounts = fakeData1?.map((item) => item.price);
 
   const chartData = {
     labels: labels,
@@ -78,4 +61,4 @@ const BarGraph = () => {
   return <Bar data={chartData} options={options}></Bar>;
 };
 
-export default BarGraph;
+export default ChartPrice;

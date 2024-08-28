@@ -1,15 +1,15 @@
-import { useWeb3Store } from "@/store/web3Store";
-import axios from "axios";
-import { useState } from "react";
-import ReactPaginate from "react-paginate";
-import useSWR from "swr";
-import Card from "./Card/Card";
-import CardShimmer from "./Card/CardShimmer";
-import { getMarketplaceNFTs } from "@/utils/web3/marketplace";
-import NullData from "./NullData";
+import { useWeb3Store } from '@/store/web3Store';
+import axios from 'axios';
+import { useState } from 'react';
+import ReactPaginate from 'react-paginate';
+import useSWR from 'swr';
+import Card from './Card/Card';
+import CardShimmer from './Card/CardShimmer';
+import { getMarketplaceNFTs } from '@/utils/web3/marketplace';
+import NullData from './NullData';
 
 export const SportNft = () => {
-  const GET_MARKET_PLACE_NFT = "getMarketplaceNFTs";
+  const GET_MARKET_PLACE_NFT = 'getMarketplaceNFTs';
 
   const { isInit } = useWeb3Store();
   const [offset, setOffset] = useState(0);
@@ -20,16 +20,16 @@ export const SportNft = () => {
       getMarketplaceNFTs(GET_MARKET_PLACE_NFT, offset, limit)
   );
 
-  const { data: ethPrice } = useSWR(isInit && ["getEthPrice"], () =>
+  const { data: ethPrice } = useSWR(isInit && ['getEthPrice'], () =>
     axios
       .get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
       )
       .then((res) => res.data.ethereum.usd)
   );
 
   const sportNFT = marketplaceData?.items
-    .filter((item) => item.category === "Sports")
+    .filter((item) => item.category === 'Sports')
     .slice(0, 4);
   return (
     <section>
