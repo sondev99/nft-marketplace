@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 import {
   Form,
@@ -11,28 +11,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-import { useForm } from 'react-hook-form';
-import { CgSpinner } from 'react-icons/cg';
-import Link from 'next/link';
-import FileInput from '@/components/Input/FileInput';
-import { useWeb3Store } from '@/store/web3Store';
-import { useUser } from '@/store/useUser';
-import userApi from '@/apis/userApi';
-import { handleErrorApi } from '@/lib/utils';
-import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
-import ChangeProfileAvatar from '@/components/ChangeProfileAvatar';
+import { useForm } from "react-hook-form";
+import { CgSpinner } from "react-icons/cg";
+import Link from "next/link";
+import FileInput from "@/components/Input/FileInput";
+import { useWeb3Store } from "@/store/web3Store";
+import { useUser } from "@/store/useUser";
+import userApi from "@/apis/userApi";
+import { handleErrorApi } from "@/lib/utils";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import ChangeProfileAvatar from "@/components/ChangeProfileAvatar";
 
 type Props = {};
 
 const MyProfilePage = (props: Props) => {
   const { setCurrentUser } = useUser();
 
-  const userInfo = JSON.parse(Cookies.get('userInfo'));
-  console.log(userInfo);
+  const userInfo = JSON.parse(Cookies.get("userInfo"));
   const form = useForm({
     defaultValues: {
       firstName: userInfo?.firstName,
@@ -46,7 +45,7 @@ const MyProfilePage = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(values: any) {
-    console.log('value: ' + { ...values });
+    console.log("value: " + { ...values });
     if (loading) return;
     setLoading(true);
     try {
@@ -57,14 +56,14 @@ const MyProfilePage = (props: Props) => {
         const response = await userApi.getCurrentUser();
         if (response.code !== 401) {
           setCurrentUser(response.data);
-          Cookies.set('userInfo', JSON.stringify(response.data));
-          const userInfoCookie = Cookies.get('userInfo');
+          Cookies.set("userInfo", JSON.stringify(response.data));
+          const userInfoCookie = Cookies.get("userInfo");
 
           if (userInfoCookie !== undefined) {
             const userInfo = JSON.parse(userInfoCookie);
             setCurrentUser(userInfo);
           } else {
-            console.error('userInfo cookie is undefined');
+            console.error("userInfo cookie is undefined");
           }
         }
         toast.success(response.message);
@@ -190,7 +189,7 @@ const MyProfilePage = (props: Props) => {
                       <CgSpinner />
                     </span>
                   )}
-                  {loading ? 'Loading...' : 'Save'}
+                  {loading ? "Loading..." : "Save"}
                 </Button>
               </form>
             </Form>

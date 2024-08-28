@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import CardShimmer from '@/components/Card/CardShimmer';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { useWeb3Store } from '@/store/web3Store';
-import { getMarketplaceNFTs } from '@/utils/web3/marketplace';
-import Card from '@/components/Card/Card';
-import axios from 'axios';
-import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
-import useSWR from 'swr';
+import CardShimmer from "@/components/Card/CardShimmer";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { useWeb3Store } from "@/store/web3Store";
+import { getMarketplaceNFTs } from "@/utils/web3/marketplace";
+import Card from "@/components/Card/Card";
+import axios from "axios";
+import { usePathname, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
+import useSWR from "swr";
 
 const CategoryPage = () => {
   const pathname = usePathname();
-  const GET_MARKET_PLACE_NFT = 'getMarketplaceNFTs';
+  const GET_MARKET_PLACE_NFT = "getMarketplaceNFTs";
 
   const { isInit } = useWeb3Store();
   const [offset, setOffset] = useState(0);
@@ -24,10 +24,10 @@ const CategoryPage = () => {
       getMarketplaceNFTs(GET_MARKET_PLACE_NFT, offset, limit)
   );
 
-  const { data: ethPrice } = useSWR(isInit && ['getEthPrice'], () =>
+  const { data: ethPrice } = useSWR(isInit && ["getEthPrice"], () =>
     axios
       .get(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
       )
       .then((res) => res.data.ethereum.usd)
   );
@@ -37,24 +37,24 @@ const CategoryPage = () => {
 
   const filteredNFTs = (): any[] => {
     switch (pathname) {
-      case '/category/anime':
+      case "/category/anime":
         return (
-          marketplaceData?.items.filter((item) => item.category === 'Anime') ||
+          marketplaceData?.items.filter((item) => item.category === "Anime") ||
           []
         );
-      case '/category/arts':
+      case "/category/arts":
         return (
-          marketplaceData?.items.filter((item) => item.category === 'Arts') ||
+          marketplaceData?.items.filter((item) => item.category === "Arts") ||
           []
         );
-      case '/category/gaming':
+      case "/category/gaming":
         return (
-          marketplaceData?.items.filter((item) => item.category === 'Gaming') ||
+          marketplaceData?.items.filter((item) => item.category === "Gaming") ||
           []
         );
-      case '/category/sports':
+      case "/category/sports":
         return (
-          marketplaceData?.items.filter((item) => item.category === 'Sports') ||
+          marketplaceData?.items.filter((item) => item.category === "Sports") ||
           []
         );
       default:
@@ -64,11 +64,28 @@ const CategoryPage = () => {
 
   const nftsToRender = filteredNFTs();
 
+  const filterName = () => {
+    switch (pathname) {
+      case "/category/anime":
+        return "Anime NFT";
+      case "/category/arts":
+        return "Arts NFT";
+      case "/category/gaming":
+        return "Gaming NFT";
+      case "/category/sports":
+        return "Sports NFT";
+      default:
+        return [];
+    }
+  };
+
+  const nftsName = filterName();
+
   return (
     <>
       <MaxWidthWrapper>
         <section>
-          <h2 className="text-2xl font-bold my-3">Anime NFT</h2>
+          <h2 className="text-2xl font-bold my-3">{nftsName}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {nftsToRender?.map((value: any, index: any) => (
               <Card
@@ -99,7 +116,7 @@ const CategoryPage = () => {
             previousClassName="text-white bg-[#0479B7] p-2 text-center rounded font-semibold"
             nextClassName="text-white bg-[#0479B7] p-2 text-center rounded font-semibold"
             pageLinkClassName="block"
-          />{' '}
+          />{" "}
           <div className="h-12"></div>
         </section>
       </MaxWidthWrapper>

@@ -1,5 +1,5 @@
-import axiosClient from '@/axios/apiConfig';
-import { API_URL_USER } from '@/constant/apiConstant';
+import axiosClient from "@/axios/apiConfig";
+import { API_URL_USER } from "@/constant/apiConstant";
 
 const url = API_URL_USER;
 const userApi = {
@@ -20,6 +20,9 @@ const userApi = {
   },
   blockUser: (id: string) => {
     return axiosClient.put(`${url}/block/${id}`);
+  },
+  getByWalletAddress: (walletAddress: string) => {
+    return axiosClient.get(`${url}/wallet-address/${walletAddress}`);
   },
 };
 

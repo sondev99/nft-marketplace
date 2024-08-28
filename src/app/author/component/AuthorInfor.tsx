@@ -1,12 +1,16 @@
-import { Button } from '@/components/ui/button';
-import { UploadIcon, VerifiIcon } from '@/icon';
-import Image from 'next/image';
-import React from 'react';
-import images from '@/img';
+import { Button } from "@/components/ui/button";
+import { UploadIcon, VerifiIcon } from "@/icon";
+import Image from "next/image";
+import React from "react";
+import images from "@/img";
+import { truncateText } from "@/utils/truncatText";
 
-type Props = {};
+type AuthorProps = {
+  name: string;
+  walletAddress: string;
+};
 
-const AuthorInfor = (props: Props) => {
+const AuthorInfor = ({ name, walletAddress }: AuthorProps) => {
   return (
     <div className="relative bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-8 rounded-3xl md:rounded-[40px] shadow-xl flex flex-col md:flex-row">
       <div className="w-32 lg:w-44 flex-shrink-0 mt-12 sm:mt-0">
@@ -24,14 +28,14 @@ const AuthorInfor = (props: Props) => {
       <div className="pt-5 md:pt-1 md:ml-6 xl:ml-14 flex-grow">
         <div className="max-w-screen-sm ">
           <h2 className="inline-flex items-center text-2xl sm:text-3xl lg:text-4xl font-semibold">
-            <span>Dony Herrera</span>
+            <span>{name}</span>
             <span className="ml-2">
               <VerifiIcon />
             </span>
           </h2>
           <div className="flex items-center text-sm font-medium space-x-2.5 mt-2.5 text-green-600 cursor-pointer">
             <span className="text-neutral-700 dark:text-neutral-300">
-              4.0xc4c16ac453sa645a...b21a{' '}
+              {truncateText(walletAddress)}
             </span>
             <svg width={20} height={21} viewBox="0 0 20 21" fill="none">
               <path

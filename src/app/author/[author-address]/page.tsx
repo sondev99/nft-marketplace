@@ -1,43 +1,62 @@
-'use client';
+"use client";
 
-import React, { useState, useContext, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 //INTENAL IMPORT
-import images from '@/img';
-import Image from 'next/image';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { UploadIcon, VerifiIcon } from '@/icon';
-import { Button } from '@/components/ui/button';
-import AuthorInfor from '../component/AuthorInfor';
-import AuthorTaps from '../component/AuthorTaps';
-import AuthorNFTCardBox from '../component/AuthorNFTCardBox';
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import AuthorInfor from "../component/AuthorInfor";
+import AuthorNFTCardBox from "../component/AuthorNFTCardBox";
+import AuthorTaps from "../component/AuthorTaps";
+import userApi from "@/apis/userApi";
+import { usePathname } from "next/navigation";
+import { useWeb3Store } from "@/store/web3Store";
+import useSWR from "swr";
+import { getMarketplaceNFTs } from "@/utils/web3/marketplace";
+import axios from "axios";
+import ReactPaginate from "react-paginate";
+import CardShimmer from "@/components/Card/CardShimmer";
+import Card from "@/components/Card/Card";
 
 const authorPage = () => {
-  const [listedNfts, setListedNfts] = useState(true);
-  const [created, setCreated] = useState(false);
-  const [like, setLike] = useState(false);
-  const [follower, setFollower] = useState(false);
-  const [following, setFollowing] = useState(false);
+  const path = usePathname();
+  const [user, setUser] = useState<UserInfo>();
+  const parts = path.split("/");
+  const address = parts[2];
+  const GET_MARKET_PLACE_NFT = "getMarketplaceNFTs";
 
-  const [nfts, setNfts] = useState<nft[]>([]);
-  const [myNfts, setMyNfts] = useState<nft[]>([]);
+  const { isInit } = useWeb3Store();
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(8);
+  const { data: marketplaceData, isValidating } = useSWR(
+    isInit && [GET_MARKET_PLACE_NFT, offset, limit],
+    ([GET_MARKET_PLACE_NFT, offset, limit]) =>
+      getMarketplaceNFTs(GET_MARKET_PLACE_NFT, offset, limit)
+  );
+
+  const { data: ethPrice } = useSWR(isInit && ["getEthPrice"], () =>
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+      )
+      .then((res) => res.data.ethereum.usd)
+  );
+  const handlePageClick = ({ selected }: { selected: number }) => {
+    setOffset(Math.ceil(selected * limit));
+  };
 
   useEffect(() => {
-    //@ts-ignore
-    fetchMyNFTsOrListedNFTs('fetchItemsListed').then((items: any) => {
-      setNfts(items);
-    });
+    const fetchData = async () => {
+      try {
+        const response = await userApi.getByWalletAddress(address);
+        if (response.code === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    //@ts-ignore
-    fetchMyNFTsOrListedNFTs('fetchMyNFTs').then((items: any) => {
-      setMyNfts(items);
-    });
-  }, []);
-
-  console.log('myNfts', myNfts);
-  console.log('listed Nft', nfts);
 
   return (
     <>
@@ -51,23 +70,46 @@ const authorPage = () => {
         </div>
       </div>
       <MaxWidthWrapper className="-mt-10 lg:-mt-16">
-        <AuthorInfor />
-      </MaxWidthWrapper>
-      <div className="mt-16">
-        <AuthorTaps
-          setListedNfts={setListedNfts}
-          setCreated={setCreated}
-          setLike={setLike}
-          setFollower={setFollower}
-          setFollowing={setFollowing}
+        <AuthorInfor
+          name={`${user?.firstName} ${user?.lastName}`}
+          walletAddress={user?.walletAddress}
         />
-      </div>
-      <AuthorNFTCardBox
-        listedNfts={listedNfts}
-        created={created}
-        nfts={nfts}
-        myNfts={myNfts}
-      />
+        <section>
+          <h2 className="text-2xl font-bold my-3"> NFT</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {marketplaceData?.items?.map((value, index) => (
+              <Card
+                key={index}
+                imageUrl={value.image}
+                url={`/nft/${value.marketplaceItemIndex}`}
+                name={value.name}
+                price={value.price}
+                ethPrice={ethPrice}
+                isSold={value.isSold}
+              />
+            )) ||
+              (isValidating &&
+                [...Array(limit)].map((value, index) => (
+                  <CardShimmer key={index} />
+                )))}
+          </div>
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={marketplaceData?.meta?.totalPage || 0}
+            previousLabel="< prev"
+            containerClassName="flex justify-center items-center space-x-2 mt-4"
+            activeClassName="bg-[#202938] text-white p-2 rounded"
+            pageClassName="bg-gray-300 p-2 aspect-square w-10 text-center rounded font-semibold text-white"
+            previousClassName="text-white bg-[#0479B7] p-2 text-center rounded font-semibold"
+            nextClassName="text-white bg-[#0479B7] p-2 text-center rounded font-semibold"
+            pageLinkClassName="block"
+          />{" "}
+          <div className="h-12"></div>
+        </section>
+      </MaxWidthWrapper>
     </>
   );
 };
