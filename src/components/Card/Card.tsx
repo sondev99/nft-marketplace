@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import Link from 'next/link';
-import React from 'react';
-import { TiTick } from 'react-icons/ti';
+import classNames from "classnames";
+import Link from "next/link";
+import React from "react";
+import { TiTick } from "react-icons/ti";
 
 type Props = {
   imageUrl: string;
@@ -14,7 +14,7 @@ type Props = {
 
 function Card({ imageUrl, url, name, price, ethPrice, isSold }: Props) {
   return (
-    <Link href={url || ''}>
+    <Link href={url || ""}>
       <div className="rounded-3xl shadow-md border transform transition duration-300 hover:-translate-y-1 relative">
         <img src={imageUrl} className="w-full aspect-square rounded-t-3xl" />
 
@@ -38,7 +38,7 @@ function Card({ imageUrl, url, name, price, ethPrice, isSold }: Props) {
               </span>
             </span>
 
-            <span className="rounded bg-gray-200 text-gray-700 p-1">BSC</span>
+            <span className="rounded bg-gray-200 text-gray-700 p-1">ETH</span>
           </div>
 
           {price && ethPrice && (
@@ -54,7 +54,7 @@ function Card({ imageUrl, url, name, price, ethPrice, isSold }: Props) {
                   />
 
                   <span className="font-semibold">
-                    {Intl.NumberFormat('en-US', {}).format(price)} ETH
+                    {Intl.NumberFormat("en-US", {}).format(price)} ETH
                   </span>
                 </span>
                 <span className="text-right block text-sm text-gray-500">
